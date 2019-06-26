@@ -1,6 +1,7 @@
 //Klasse Spielfeld enthält das Spielfeld und all seine Elemente so wie deren Logik
 package com.company;
 
+import javax.annotation.Resource;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -56,7 +57,13 @@ public class Spielfeld {
     private boolean threadRunning = true;
     //Wird in dieser Version gerade nicht mehr benötigt
     private boolean gameRunning;
-
+    //Radio Buttons um den Hintergrund zu wechseln
+    private JRadioButton background1 = new JRadioButton("1");
+    private JRadioButton background2 = new JRadioButton("2");
+    private JRadioButton background3 = new JRadioButton("3");
+    private JRadioButton background4 = new JRadioButton("4");
+    private ButtonGroup bgBtnGrp = new ButtonGroup();
+    private JLabel backgroundLabel = new JLabel("Hintergrundbild ändern");
     //Prüft bei einem Tastenabdruck ab, ob für diese Taste eine Funktion hinterlegt wurde, funktioniert nur wenn
     //der KeyListener einem Block hinzugefügt wurde
     private KeyListener tastenDruck = new KeyListener() {
@@ -272,6 +279,35 @@ public class Spielfeld {
         this.paneel.add(levelLabel);
         this.paneel.add(rowLabel);
         this.paneel.add(scoreLabel);
+        this.paneel.add(backgroundLabel);
+        //Selektiere einen der Radio Buttons
+        background1.setSelected(true);
+        //Setze die Position
+        backgroundLabel.setBounds(600, 50, 150, 30);
+        background1.setLocation(600, 80);
+        background2.setLocation(620, 80);
+        background3.setLocation(640, 80);
+        background4.setLocation(660, 80);
+        //Setze die Größe
+        background1.setSize(20,20);
+        background2.setSize(20,20);
+        background3.setSize(20,20);
+        background4.setSize(20,20);
+        //Füge die Radio Buttons dem Paneel hinzu
+        this.paneel.add(background1);
+        this.paneel.add(background2);
+        this.paneel.add(background3);
+        this.paneel.add(background4);
+        //Füge die Action Listener hinzu
+        background1.addActionListener(e -> changeBackgrounds(1));
+        background2.addActionListener(e -> changeBackgrounds(2));
+        background3.addActionListener(e -> changeBackgrounds(3));
+        background4.addActionListener(e -> changeBackgrounds(4));
+        //Gruppiere die Radio Buttons
+        this.bgBtnGrp.add(background1);
+        this.bgBtnGrp.add(background2);
+        this.bgBtnGrp.add(background3);
+        this.bgBtnGrp.add(background4);
 
         /*
         this.bl = this.blockList.get(blockList.size() - 1);
@@ -398,6 +434,12 @@ public class Spielfeld {
         timer1.start();
     }
 
+    //Methode um die Hintergrundbilder mittels der Radio Buttons zu ändern
+    private void changeBackgrounds(int number) {
+        background.setIcon(new ImageIcon(Resource.class.getResource("/background/" + number + ".png")));
+        nextBackground.setIcon(new ImageIcon(Resource.class.getResource("/background/" + number + "b.png")));
+    }
+
     //Versucht die Spielgeschwindigkeit zu optimieren
     //Zählt jede Millisekunde hoch und messe damit die Zeit die benötigt wurde um den Code auszuführen
     //und verringere die Wartezeit des Timeres um die vergangene Zeit um das Ruckeln etwas in den Griff zu bekommen
@@ -440,7 +482,8 @@ public class Spielfeld {
         else if (rows >= 70 && level == 7) increaseLevel();
         else if (rows >= 80 && level == 8) increaseLevel();
         else if (rows >= 90 && level == 9) increaseLevel();
-        else if (rows >= 100 && level == 10) increaseLevel();
+        // Tetris hat eigentlich nur 10 Level !
+        //else if (rows >= 100 && level == 10) increaseLevel();
 
         levelLabel.setText("Level: " + level);
         rowLabel.setText("Reihen: " + rows);
