@@ -57,6 +57,8 @@ public class Spielfeld {
     private boolean threadRunning = true;
     //Wird in dieser Version gerade nicht mehr benötigt
     private boolean gameRunning;
+    private boolean isGameRunning;
+    private JButton pauseButton = new JButton();
     //Radio Buttons um den Hintergrund zu wechseln
     private JRadioButton background1 = new JRadioButton("1");
     private JRadioButton background2 = new JRadioButton("2");
@@ -289,6 +291,12 @@ public class Spielfeld {
         background2.setLocation(620, 80);
         background3.setLocation(640, 80);
         background4.setLocation(660, 80);
+
+        background1.setFocusable(false);
+        background2.setFocusable(false);
+        background3.setFocusable(false);
+        background4.setFocusable(false);
+
         //Setze die Größe
         background1.setSize(20,20);
         background2.setSize(20,20);
@@ -309,6 +317,18 @@ public class Spielfeld {
         this.bgBtnGrp.add(background2);
         this.bgBtnGrp.add(background3);
         this.bgBtnGrp.add(background4);
+
+        //Pause Button
+        this.pauseButton.setBounds(620, 120, 56, 73);
+        this.pauseButton.setIcon(loadIcon("/button_icons/play_button.png"));
+        this.pauseButton.setOpaque(false);
+        this.pauseButton.setContentAreaFilled(false);
+        this.pauseButton.setBorderPainted(false);
+        this.pauseButton.setFocusable(false);
+        this.pauseButton.addActionListener(e -> pauseGame() );
+        this.paneel.add(pauseButton);
+
+        this.isGameRunning = true;
 
         /*
         this.bl = this.blockList.get(blockList.size() - 1);
@@ -375,7 +395,7 @@ public class Spielfeld {
     //Wenn eine Taste gedrückt
     private void tasteGedrueckt(int taste) {
         //Führe nur aus wenn der Tetruino aktiv ist
-        if (tetrus.isActive() ) {
+        if (tetrus.isActive() && isGameRunning) {
             //System.out.println(taste);
             //Switch Case für die einzelnen Tasten die für die Steuerung genutzt werden und bewege den Tetruino wenn position frei ist
             switch (taste) {
@@ -405,6 +425,24 @@ public class Spielfeld {
                 //    break;
             }
         }
+    }
+
+    private void pauseGame() {
+        if (isGameRunning) {
+            isGameRunning = false;
+            pauseButton.setIcon(loadIcon("/button_icons/pause_button.png"));
+            timer1.stop();
+        }
+        else {
+            isGameRunning = true;
+            pauseButton.setIcon(loadIcon("/button_icons/play_button.png"));
+            timer1.start();
+        }
+    }
+
+    //Gibt ein Icon zurück
+    private ImageIcon loadIcon(String path) {
+        return new ImageIcon(Class.class.getResource(path));
     }
 
     //Methode um das Spiel neuzustarten
@@ -530,50 +568,50 @@ public class Spielfeld {
 
     //Zerstört alle vollständigen Reihen
     private void destroyBlocks() {
-        //Halte Timer an
-        timer1.stop();
-        //Wenn mehrere Reihen aufeinmal zerstört werden soll man auch mehr Punkte bekommen!
-        int multiplikator = 1;
-        //Gehe jedes Feld durch
-        //vertikale Reihen
-        for (int i = 550; i >= 50; i -= 25) {
-            //horizontale Reihen
-            //Zähle die Anzahl der Blöcke in der horizontalen Reihe
-            byte anzBlocks = 0;
-            for (int j = 50; j <= 300; j += 25) {
-                for (Tetruino t: tetruinos) {
-                    //Zähle nur mit wenn Tetruino nicht aktiv ist
-                    if (!t.isActive() ) {
-                        for (Block blocks : t.tetruBlocks) {
-                            //Wenn Position des Tetruinos gleich der der Reihe zähle hoch
-                            if (blocks.getPosX() == j && blocks.getPosY() == i) {
-                                anzBlocks++;
-                                //System.out.println(anzBlocks);
+            //Halte Timer an
+            timer1.stop();
+            //Wenn mehrere Reihen aufeinmal zerstört werden soll man auch mehr Punkte bekommen!
+            int multiplikator = 1;
+            //Gehe jedes Feld durch
+            //vertikale Reihen
+            for (int i = 550; i >= 50; i -= 25) {
+                //horizontale Reihen
+                //Zähle die Anzahl der Blöcke in der horizontalen Reihe
+                byte anzBlocks = 0;
+                for (int j = 50; j <= 300; j += 25) {
+                    for (Tetruino t: tetruinos) {
+                        //Zähle nur mit wenn Tetruino nicht aktiv ist
+                        if (!t.isActive()) {
+                            for (Block blocks : t.tetruBlocks) {
+                                //Wenn Position des Tetruinos gleich der der Reihe zähle hoch
+                                if (blocks.getPosX() == j && blocks.getPosY() == i) {
+                                    anzBlocks++;
+                                    //System.out.println(anzBlocks);
+                                }
                             }
                         }
                     }
                 }
-            }
-            //Wenn Anzahl der Blöcke gleich 10
-            if (anzBlocks == 10) {
-                //Lösche Reihen auf der Höhe i
-                removeLine(i);
-                //Bewege Reihen nach unten auf der Höhe i
-                moveLine(i);
-                //Erhöhe i um 25 damit diese Reihe nochmal geprüft wird, da ja die Reihen nach unten gerutscht sind
-                i += 25;
-                //Erhöhe Multiplikator
-                multiplikator++;
-                //Zeichne das Spielfeld neu
-                spielfeld.repaint();
-                spielfeld.revalidate();
-                //Erhöhe Score und Reihen
-                score += 100 * level * multiplikator;
-                rows++;
+                //Wenn Anzahl der Blöcke gleich 10
+                if (anzBlocks == 10) {
+                    //Lösche Reihen auf der Höhe i
+                    removeLine(i);
+                    //Bewege Reihen nach unten auf der Höhe i
+                    moveLine(i);
+                    //Erhöhe i um 25 damit diese Reihe nochmal geprüft wird, da ja die Reihen nach unten gerutscht sind
+                    i += 25;
+                    //Erhöhe Multiplikator
+                    multiplikator++;
+                    //Zeichne das Spielfeld neu
+                    spielfeld.repaint();
+                    spielfeld.revalidate();
+                    //Erhöhe Score und Reihen
+                    score += 100 * level * multiplikator;
+                    rows++;
 
+                }
+                //if (multiplikator == 4) boomBitch();
             }
-            //if (multiplikator == 4) boomBitch();
-        }
         //Starte wieder den Timer damit das Spiel fortgesetzt werden kann
         timer1.start();
     }
