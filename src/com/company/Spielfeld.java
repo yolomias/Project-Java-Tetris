@@ -129,7 +129,8 @@ public class Spielfeld {
 
             } */
                //Wenn startposition blockiert und position darunter nicht frei beende das Spiel
-                if (!isNextTetruinoPositionFree(tetrus, 'd') && tetrus.tetruBlocks.get(0).getPosY() == 50) {
+                if (!isNextTetruinoPositionFree(tetrus, 'd') && tetrus.tetruBlocks.get(0).getPosY() == 50
+                        && tetrus.tetruBlocks.get(0).getPosX() == 150) {
                     timer1.stop();
                     JOptionPane.showMessageDialog(spielfeld, "Das Spiel ist vorbei, du hast verloren!");
                     //Frage nach ob das Spiel neugestartet werden soll
