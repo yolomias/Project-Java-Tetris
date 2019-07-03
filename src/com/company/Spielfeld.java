@@ -59,6 +59,44 @@ public class Spielfeld {
     private boolean gameRunning;
     private boolean isGameRunning;
     private JButton pauseButton = new JButton();
+    //Eine Spielerliste in die die Punkte der letzten Spieler eingetragen werden
+    private List<Spieler> spielerlist;
+    private byte sekunden;
+    private byte minuten;
+    private byte stunden;
+    //Timer für die vergange Spielzeit
+    private JLabel timerLabel = new JLabel("Vergangene Zeit: ");
+    private ActionListener zeitVergangen = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            sekunden++;
+            if (sekunden >= 60) {
+                minuten++;
+                sekunden = 0;
+            }
+            if (minuten >= 60) {
+                stunden++;
+                minuten = 0;
+            }
+            String s = "";
+            String m = "";
+            String h = "";
+
+            if (sekunden < 10) s += "0" + sekunden;
+            else s += sekunden;
+            if (minuten < 10) m += "0" + minuten;
+            else m += minuten;
+            if (stunden < 10) h += "0" + stunden;
+            else if (stunden >= 120) {
+                stunden = 120;
+                h = "max";
+            }
+            else h += stunden;
+
+            timerLabel.setText("Vergangene Zeit: " + h + ":" + m + ":" + s);
+        }
+    };
+    private Timer timerVergangeneZeit = new Timer(1000, zeitVergangen);
     //Radio Buttons um den Hintergrund zu wechseln
     private JRadioButton background1 = new JRadioButton("1");
     private JRadioButton background2 = new JRadioButton("2");
@@ -134,6 +172,7 @@ public class Spielfeld {
                 if (!isNextTetruinoPositionFree(tetrus, 'd') && tetrus.tetruBlocks.get(0).getPosY() == 50
                         && tetrus.tetruBlocks.get(0).getPosX() == 150) {
                     timer1.stop();
+                    timerVergangeneZeit.stop();
                     JOptionPane.showMessageDialog(spielfeld, "Das Spiel ist vorbei, du hast verloren!");
                     //Frage nach ob das Spiel neugestartet werden soll
                     int result = JOptionPane.showConfirmDialog(spielfeld, "Willst du es nochmal versuchen?");
@@ -291,12 +330,11 @@ public class Spielfeld {
         background2.setLocation(620, 80);
         background3.setLocation(640, 80);
         background4.setLocation(660, 80);
-
+        //Entferne den Fokus, damit der Tetruino ihn nicht mehr verlieren kann
         background1.setFocusable(false);
         background2.setFocusable(false);
         background3.setFocusable(false);
         background4.setFocusable(false);
-
         //Setze die Größe
         background1.setSize(20,20);
         background2.setSize(20,20);
@@ -317,7 +355,6 @@ public class Spielfeld {
         this.bgBtnGrp.add(background2);
         this.bgBtnGrp.add(background3);
         this.bgBtnGrp.add(background4);
-
         //Pause Button
         this.pauseButton.setBounds(620, 120, 56, 73);
         this.pauseButton.setIcon(loadIcon("/button_icons/play_button.png"));
@@ -327,8 +364,13 @@ public class Spielfeld {
         this.pauseButton.setFocusable(false);
         this.pauseButton.addActionListener(e -> pauseGame() );
         this.paneel.add(pauseButton);
-
         this.isGameRunning = true;
+        //Initialisiere den Timer und die dazugehörigen Labels
+        this.timerLabel.setBounds(400, 210, 300, 30);
+        this.paneel.add(timerLabel);
+        this.sekunden = 0;
+        this.minuten = 0;
+        this.stunden = 0;
 
         /*
         this.bl = this.blockList.get(blockList.size() - 1);
@@ -336,6 +378,7 @@ public class Spielfeld {
         this.bl.requestFocus();
         this.paneel.add(bl);
         */
+
         //Füge die Hintergründe für das Spielfeld ein
         this.background.setIcon(new ImageIcon(Class.class.getResource("/background/1.png")));
         this.background.setLocation(75, 50);
@@ -356,6 +399,7 @@ public class Spielfeld {
         //Füge den Spiellogik Action Listener dem Timer hinnzu und starte ihn
         this.timer1.addActionListener(alGameStart);
         this.timer1.start();
+        this.timerVergangeneZeit.start();
        //this.gameRunning = true;
        //runningGame();
     }
@@ -432,11 +476,13 @@ public class Spielfeld {
             isGameRunning = false;
             pauseButton.setIcon(loadIcon("/button_icons/pause_button.png"));
             timer1.stop();
+            timerVergangeneZeit.stop();
         }
         else {
             isGameRunning = true;
             pauseButton.setIcon(loadIcon("/button_icons/play_button.png"));
             timer1.start();
+            timerVergangeneZeit.start();
         }
     }
 
@@ -454,6 +500,10 @@ public class Spielfeld {
         level = 1;
         rows = 0;
         score = 0;
+        sekunden = 0;
+        minuten = 0;
+        stunden = 0;
+        timerLabel.setText("Vergangene Zeit: 00:00:00");
         updateGame();
         spielfeld.repaint();
         spielfeld.revalidate();
@@ -471,6 +521,7 @@ public class Spielfeld {
         //this.spielfeld.addKeyListener(tastenDruck);
         this.spielfeld.requestFocus();
         timer1.start();
+        timerVergangeneZeit.start();
     }
 
     //Methode um die Hintergrundbilder mittels der Radio Buttons zu ändern
