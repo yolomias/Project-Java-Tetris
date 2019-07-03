@@ -3,10 +3,10 @@ package com.company;
 
 public class Spieler {
     private String name;
-    private String punktzahl;
+    private long punktzahl;
     private String zeit;
 
-    public Spieler(String name, String punktzahl, String zeit) {
+    Spieler(String name, long punktzahl, String zeit) {
         this.name = name;
         this.punktzahl = punktzahl;
         this.zeit = zeit;
@@ -20,11 +20,11 @@ public class Spieler {
         this.name = name;
     }
 
-    public String getPunktzahl() {
+    public long getPunktzahl() {
         return punktzahl;
     }
 
-    public void setPunktzahl(String punktzahl) {
+    public void setPunktzahl(long punktzahl) {
         this.punktzahl = punktzahl;
     }
 
@@ -34,5 +34,9 @@ public class Spieler {
 
     public void setZeit(String zeit) {
         this.zeit = zeit;
+    }
+
+    public void print() {
+        System.out.println("Name: " + getName() + " Score: " + getPunktzahl() + " Zeit: " + getZeit());
     }
 }

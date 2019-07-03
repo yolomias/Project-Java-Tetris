@@ -174,6 +174,9 @@ public class Spielfeld {
                     timer1.stop();
                     timerVergangeneZeit.stop();
                     JOptionPane.showMessageDialog(spielfeld, "Das Spiel ist vorbei, du hast verloren!");
+                    if (score >= 1000) addSpielerToList();
+                    else JOptionPane.showMessageDialog(spielfeld, "Du warst nicht mal gut genug um 1000 Punkte zu erreichen,\n" +
+                            "für einen Platz auf der Highscoreliste hat es daher nicht gereicht!");
                     //Frage nach ob das Spiel neugestartet werden soll
                     int result = JOptionPane.showConfirmDialog(spielfeld, "Willst du es nochmal versuchen?");
                     if (result == JOptionPane.YES_OPTION) {
@@ -371,7 +374,13 @@ public class Spielfeld {
         this.sekunden = 0;
         this.minuten = 0;
         this.stunden = 0;
-
+        //Liste der Spieler wird initialisiert
+        spielerlist = new ArrayList<>();
+        spielerlist.add(new Spieler("Ja!", 1000000, "99:99:99"));
+        spielerlist.add(new Spieler("OG LOC", 500000, "50:50:50"));
+        spielerlist.add(new Spieler("Kollegah", 450000, "69:69:69"));
+        spielerlist.add(new Spieler("The Rock", 445000, "68:68:68"));
+        spielerlist.add(new Spieler("Yo Oli", 156500, "01:01:01"));
         /*
         this.bl = this.blockList.get(blockList.size() - 1);
         this.bl.addKeyListener(tastenDruck);
@@ -486,6 +495,22 @@ public class Spielfeld {
         }
     }
 
+    private void addSpielerToList() {
+        boolean namePassend = false;
+        String name = "";
+        do {
+            name = JOptionPane.showInputDialog(spielfeld, "Gib deinen Namen ein! \n" +
+                    "(Dieser sollte mindestens aus 2 Zeichen bestehen und nicht nur aus Leerzeichen bestehen)");
+
+            if (name != null) {
+                if (name.length() >= 2) namePassend = true;
+            }
+        } while (!namePassend);
+
+        String vergangeneZeit = stunden + ":" + minuten + ":" + sekunden;
+        spielerlist.add(new Spieler(name, score, vergangeneZeit));
+    }
+
     //Gibt ein Icon zurück
     private ImageIcon loadIcon(String path) {
         return new ImageIcon(Class.class.getResource(path));
@@ -522,6 +547,9 @@ public class Spielfeld {
         this.spielfeld.requestFocus();
         timer1.start();
         timerVergangeneZeit.start();
+        for (Spieler s: spielerlist) {
+            s.print();
+        }
     }
 
     //Methode um die Hintergrundbilder mittels der Radio Buttons zu ändern
