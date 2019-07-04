@@ -3,10 +3,10 @@ package com.company;
 
 import javax.annotation.Resource;
 import javax.swing.*;
+import javax.swing.Timer;
+import javax.xml.soap.Node;
 import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Spielfeld {
     //x, y Größe des Spielfensters
@@ -59,6 +59,9 @@ public class Spielfeld {
     private boolean gameRunning;
     private boolean isGameRunning;
     private JButton pauseButton = new JButton();
+    //Labels um die Besten 5 Spieler anzuzeigen
+    private JLabel scoreTitel = new JLabel();
+    private JLabel[] scores = new JLabel[5];
     //Eine Spielerliste in die die Punkte der letzten Spieler eingetragen werden
     private List<Spieler> spielerlist;
     private byte sekunden;
@@ -174,8 +177,8 @@ public class Spielfeld {
                     timer1.stop();
                     timerVergangeneZeit.stop();
                     JOptionPane.showMessageDialog(spielfeld, "Das Spiel ist vorbei, du hast verloren!");
-                    if (score >= 1000) addSpielerToList();
-                    else JOptionPane.showMessageDialog(spielfeld, "Du warst nicht mal gut genug um 1000 Punkte zu erreichen,\n" +
+                    if (score >= 10000) addSpielerToList();
+                    else JOptionPane.showMessageDialog(spielfeld, "Du warst nicht mal gut genug um 10000 Punkte zu erreichen,\n" +
                             "für einen Platz auf der Highscoreliste hat es daher nicht gereicht!");
                     //Frage nach ob das Spiel neugestartet werden soll
                     int result = JOptionPane.showConfirmDialog(spielfeld, "Willst du es nochmal versuchen?");
@@ -376,11 +379,34 @@ public class Spielfeld {
         this.stunden = 0;
         //Liste der Spieler wird initialisiert
         spielerlist = new ArrayList<>();
-        spielerlist.add(new Spieler("Ja!", 1000000, "99:99:99"));
-        spielerlist.add(new Spieler("OG LOC", 500000, "50:50:50"));
-        spielerlist.add(new Spieler("Kollegah", 450000, "69:69:69"));
-        spielerlist.add(new Spieler("The Rock", 445000, "68:68:68"));
-        spielerlist.add(new Spieler("Yo Oli", 156500, "01:01:01"));
+        spielerlist.add(new Spieler("Ja!", 100000, "99:99:99"));
+        spielerlist.add(new Spieler("OG LOC", 50000, "50:50:50"));
+        spielerlist.add(new Spieler("Kollegah", 45000, "69:69:69"));
+        spielerlist.add(new Spieler("The Rock", 44500, "68:68:68"));
+        spielerlist.add(new Spieler("Yo Oli", 15650, "01:01:01"));
+        //Initialisiere die TOP 5 besten Spieler
+        this.scoreTitel.setBounds(400, 380, 300, 30);
+        this.scoreTitel.setText("Die 5 besten Spieler");
+        this.scoreTitel.setFont(scoreTitel.getFont().deriveFont(20.0f));
+        this.paneel.add(scoreTitel);
+        this.scores[0] = new JLabel();
+        this.scores[1] = new JLabel();
+        this.scores[2] = new JLabel();
+        this.scores[3] = new JLabel();
+        this.scores[4] = new JLabel();
+        this.scores[0].setBounds(400, 410, 370, 30);
+        this.scores[1].setBounds(400, 440, 370 ,30);
+        this.scores[2].setBounds(400, 470, 370 ,30);
+        this.scores[3].setBounds(400, 500, 370, 30);
+        this.scores[4].setBounds(400, 530, 370 ,30);
+
+        this.paneel.add(scores[0]);
+        this.paneel.add(scores[1]);
+        this.paneel.add(scores[2]);
+        this.paneel.add(scores[3]);
+        this.paneel.add(scores[4]);
+
+        best5Players();
         /*
         this.bl = this.blockList.get(blockList.size() - 1);
         this.bl.addKeyListener(tastenDruck);
@@ -480,6 +506,14 @@ public class Spielfeld {
         }
     }
 
+    //Initialisiere die 5 besten Spieler Labels
+    private void best5Players() {
+        for (int i = 0; i < 5; i++) {
+            Spieler s = spielerlist.get(i);
+            scores[i].setText((i + 1) + ". Platz: " + s.getName() + ",    Punktzahl: " + s.getPunktzahl() + ",    Zeit: " + s.getZeit());
+        }
+    }
+
     private void pauseGame() {
         if (isGameRunning) {
             isGameRunning = false;
@@ -507,8 +541,10 @@ public class Spielfeld {
             }
         } while (!namePassend);
 
-        String vergangeneZeit = stunden + ":" + minuten + ":" + sekunden;
-        spielerlist.add(new Spieler(name, score, vergangeneZeit));
+        //String vergangeneZeit = stunden + ":" + minuten + ":" + sekunden;
+        String[] vergangeneZeit = timerLabel.getText().split("Vergangene Zeit: ");
+        spielerlist.add(new Spieler(name, score, vergangeneZeit[1]));
+        Collections.sort(spielerlist, Comparator.comparing(Spieler::getPunktzahl).reversed());
     }
 
     //Gibt ein Icon zurück
@@ -530,6 +566,7 @@ public class Spielfeld {
         stunden = 0;
         timerLabel.setText("Vergangene Zeit: 00:00:00");
         updateGame();
+        best5Players();
         spielfeld.repaint();
         spielfeld.revalidate();
         this.addTetruino();
