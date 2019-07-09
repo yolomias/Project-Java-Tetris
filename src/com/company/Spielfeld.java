@@ -584,7 +584,10 @@ public class Spielfeld {
                     break;
                 }
                 //Wenn der Name gleich ist, aber die neue Punktzahl kleiner ist als die alte ist die Punktzahl schlecht und soll nicht gespeichert werden
-                else return;
+                else {
+                    System.out.println("Spielstand abgelehnt! Spiel besser du Versager!!");
+                    return;
+                }
             }
             i++;
         }
