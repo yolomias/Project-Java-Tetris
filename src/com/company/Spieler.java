@@ -1,7 +1,9 @@
 //Die Spieler Klasse enthält die Daten für die Highscores
 package com.company;
 
-public class Spieler {
+import java.io.Serializable;
+
+public class Spieler implements Serializable {
     private String name;
     private long punktzahl;
     private String zeit;

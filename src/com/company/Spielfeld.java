@@ -6,6 +6,7 @@ import javax.swing.*;
 import javax.swing.Timer;
 import javax.xml.soap.Node;
 import java.awt.event.*;
+import java.io.*;
 import java.util.*;
 
 public class Spielfeld {
@@ -379,11 +380,27 @@ public class Spielfeld {
         this.stunden = 0;
         //Liste der Spieler wird initialisiert
         spielerlist = new ArrayList<>();
-        spielerlist.add(new Spieler("Ja!", 100000, "99:99:99"));
-        spielerlist.add(new Spieler("OG LOC", 50000, "50:50:50"));
-        spielerlist.add(new Spieler("Kollegah", 45000, "69:69:69"));
-        spielerlist.add(new Spieler("The Rock", 44500, "68:68:68"));
-        spielerlist.add(new Spieler("Yo Oli", 15650, "01:01:01"));
+        try {
+            FileInputStream filestream = new FileInputStream("high.score");
+            ObjectInputStream objectstream = new ObjectInputStream(filestream);
+
+            spielerlist = (List<Spieler>) objectstream.readObject();
+
+            objectstream.close();
+            filestream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            spielerlist.add(new Spieler("Ja!", 100000, "99:99:99"));
+            spielerlist.add(new Spieler("OG LOC", 50000, "50:50:50"));
+            spielerlist.add(new Spieler("Kollegah", 45000, "69:69:69"));
+            spielerlist.add(new Spieler("The Rock", 44500, "68:68:68"));
+            spielerlist.add(new Spieler("Yo Oli", 15650, "01:01:01"));
+        }
+        catch (ClassNotFoundException e) {
+            System.out.println("Konnte Klasse nicht finden...");
+            e.printStackTrace();
+        }
+
         //Initialisiere die TOP 5 besten Spieler
         this.scoreTitel.setBounds(400, 380, 300, 30);
         this.scoreTitel.setText("Die 5 besten Spieler");
@@ -529,6 +546,19 @@ public class Spielfeld {
         }
     }
 
+    private void saveSpielerlistToDisk() {
+        try {
+            FileOutputStream filestream = new FileOutputStream("high.score");
+            ObjectOutputStream outputstream = new ObjectOutputStream(filestream);
+            outputstream.writeObject(spielerlist);
+            outputstream.close();
+            filestream.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void addSpielerToList() {
         boolean namePassend = false;
         String name = "";
@@ -564,6 +594,7 @@ public class Spielfeld {
         sekunden = 0;
         minuten = 0;
         stunden = 0;
+        saveSpielerlistToDisk();
         timerLabel.setText("Vergangene Zeit: 00:00:00");
         updateGame();
         best5Players();
