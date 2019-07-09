@@ -532,6 +532,7 @@ public class Spielfeld {
         }
     }
 
+    //Pausiere das Spiel und setze es wieder fort
     private void pauseGame() {
         if (isGameRunning) {
             isGameRunning = false;
@@ -547,6 +548,7 @@ public class Spielfeld {
         }
     }
 
+    //Sichere die spielerliste auf die Festplatte
     private void saveSpielerlistToDisk() {
         try {
             FileOutputStream filestream = new FileOutputStream("high.score");
@@ -560,6 +562,7 @@ public class Spielfeld {
         }
     }
 
+    //Füge den aktuellen Spieler auf der spielerliste hinzu
     private void addSpielerToList() {
         boolean namePassend = false;
         String name = "";
@@ -580,6 +583,8 @@ public class Spielfeld {
                     existiertSpielerBereits = true;
                     break;
                 }
+                //Wenn der Name gleich ist, aber die neue Punktzahl kleiner ist als die alte ist die Punktzahl schlecht und soll nicht gespeichert werden
+                else return;
             }
             i++;
         }
