@@ -181,6 +181,7 @@ public class Spielfeld {
                     if (score >= 10000) addSpielerToList();
                     else JOptionPane.showMessageDialog(spielfeld, "Du warst nicht mal gut genug um 10000 Punkte zu erreichen,\n" +
                             "für einen Platz auf der Highscoreliste hat es daher nicht gereicht!");
+                    saveSpielerlistToDisk();
                     //Frage nach ob das Spiel neugestartet werden soll
                     int result = JOptionPane.showConfirmDialog(spielfeld, "Willst du es nochmal versuchen?");
                     if (result == JOptionPane.YES_OPTION) {
@@ -570,11 +571,28 @@ public class Spielfeld {
                 if (name.length() >= 2) namePassend = true;
             }
         } while (!namePassend);
-
+        int i = 0;
+        boolean existiertSpielerBereits = false;
+        //Prüfe nach, ob der Spieler bereits existiert und ob die neue Punktzahl größer ist als die alte
+        for (Spieler s: spielerlist) {
+            if (s.getName().equals(name)) {
+                if (s.getPunktzahl() < score) {
+                    existiertSpielerBereits = true;
+                    break;
+                }
+            }
+            i++;
+        }
+        //Wenn Spieler bereits existiert soll sein Spielstand überschrieben werden
+        if (existiertSpielerBereits) {
+            spielerlist.remove(i);
+            System.out.println("Spieler überschrieben.");
+        }
         //String vergangeneZeit = stunden + ":" + minuten + ":" + sekunden;
         String[] vergangeneZeit = timerLabel.getText().split("Vergangene Zeit: ");
         spielerlist.add(new Spieler(name, score, vergangeneZeit[1]));
         Collections.sort(spielerlist, Comparator.comparing(Spieler::getPunktzahl).reversed());
+
     }
 
     //Gibt ein Icon zurück
@@ -594,7 +612,6 @@ public class Spielfeld {
         sekunden = 0;
         minuten = 0;
         stunden = 0;
-        saveSpielerlistToDisk();
         timerLabel.setText("Vergangene Zeit: 00:00:00");
         updateGame();
         best5Players();
