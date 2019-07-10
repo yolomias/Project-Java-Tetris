@@ -517,6 +517,10 @@ public class Spielfeld {
                     tetrus.rotate('x');
                     break;
 
+                case 521:
+                    if (level < 10) increaseLevel();
+                    break;
+
                 //Y Taste, versuche Tetruino gegen den Uhrzeigersinn zu drehen
                 // case 89: tetruinos.get(0).rotate('y');
                 //    break;
