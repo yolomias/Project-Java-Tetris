@@ -419,7 +419,7 @@ public class Spielfeld {
         //Liste der Spieler wird initialisiert
         spielerlist = new ArrayList<>();
         try {
-            FileInputStream filestream = new FileInputStream("high.score");
+            FileInputStream filestream = new FileInputStream(System.getProperty("user.home") + "/Project-Java-Tetris-high.score");
             ObjectInputStream objectstream = new ObjectInputStream(filestream);
 
             spielerlist = (List<Spieler>) objectstream.readObject();
@@ -593,7 +593,7 @@ public class Spielfeld {
     //Sichere die spielerliste auf die Festplatte
     private void saveSpielerlistToDisk() {
         try {
-            FileOutputStream filestream = new FileOutputStream("high.score");
+            FileOutputStream filestream = new FileOutputStream(System.getProperty("user.home") + "/Project-Java-Tetris-high.score");
             ObjectOutputStream outputstream = new ObjectOutputStream(filestream);
             outputstream.writeObject(spielerlist);
             outputstream.close();
