@@ -1,3 +1,4 @@
+/*
 package com.company;
 
 import javax.swing.*;
@@ -95,6 +96,7 @@ public class SpielfeldALT {
             }
             /* Wenn Block am Ende des Spielfeldes angekommen oder Position unter dem Block nicht frei ist halte
                 den aktuellen Block an und füge einen neuen hinzu */
+/*
             else if (bl.getPosY() >= 550 || !isPositionFree('d')) {
                 System.out.println(bl.getBounds());
                 //System.out.println("ID: " + Block.getId());
@@ -286,3 +288,6 @@ public class SpielfeldALT {
         thread.start();
     }
 }
+
+
+ */

@@ -14,10 +14,10 @@ class Block extends JButton {
     private Icon texture;
 
     //Konstruktor stelle alle Maße, Positionen, Farben und Icons ein
-    Block(Color bgColour) {
+    Block(Color bgColour, boolean minimalism) {
         this.bgColour = Color.YELLOW;
         this.setBackground(bgColour);
-        this.texture = new ImageIcon(Class.class.getResource("/texture/block.png"));
+        if (!minimalism) this.texture = new ImageIcon(Class.class.getResource("/texture/block.png"));
         this.setIcon(texture);
         this.setFocusPainted(false);
         this.posX = 150;

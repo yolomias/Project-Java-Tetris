@@ -10,12 +10,12 @@ import java.awt.*;
 
 public class Zett extends Tetruino {
 
-    public Zett() {
+    public Zett(boolean minimalstic) {
         this.setRotation(1);
         this.setAmount(4);
         this.setName('Z');
         for (int i = 0; i < getAmount(); i++) {
-            Block block = new Block(Color.MAGENTA);
+            Block block = new Block(Color.MAGENTA, minimalstic);
             int number = i;
             block.addActionListener(e -> System.out.println("Block Nr: " + number));
             tetruBlocks.add(block);

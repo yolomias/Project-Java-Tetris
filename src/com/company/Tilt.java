@@ -15,12 +15,12 @@ import java.awt.*;
 public class Tilt extends Tetruino {
 
     //Konstruktor
-    public Tilt() {
+    public Tilt(boolean minimalstic) {
         this.setRotation(1);
         this.setAmount(4);
         this.setName('T');
         for (int i = 0; i < getAmount(); i++) {
-            Block block = new Block(Color.YELLOW);
+            Block block = new Block(Color.YELLOW, minimalstic);
             int number = i;
             block.addActionListener(e -> System.out.println("Block Nr: " + number));
             tetruBlocks.add(block);

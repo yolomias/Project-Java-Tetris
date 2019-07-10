@@ -11,12 +11,12 @@ import java.awt.*;
 
 public class Lawliet extends Tetruino {
 
-    public Lawliet() {
+    public Lawliet(boolean minimalstic) {
         this.setRotation(1);
         this.setAmount(4);
         this.setName('l');
         for (int i = 0; i < getAmount(); i++) {
-            Block block = new Block(Color.BLUE);
+            Block block = new Block(Color.BLUE, minimalstic);
             tetruBlocks.add(block);
         }
         platziereBlocks();

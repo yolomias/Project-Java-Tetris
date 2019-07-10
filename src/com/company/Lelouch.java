@@ -11,12 +11,12 @@ import java.awt.*;
 
 public class Lelouch extends Tetruino {
 
-    public Lelouch() {
+    public Lelouch(boolean minimalstic) {
         this.setRotation(1);
         this.setAmount(4);
         this.setName('L');
         for (int i = 0; i < getAmount(); i++) {
-            Block block = new Block(Color.CYAN);
+            Block block = new Block(Color.CYAN, minimalstic);
             tetruBlocks.add(block);
         }
         platziereBlocks();

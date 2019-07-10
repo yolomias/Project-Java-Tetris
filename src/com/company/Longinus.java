@@ -12,12 +12,12 @@ import java.awt.*;
 
 public class Longinus extends Tetruino {
 
-    public Longinus() {
+    public Longinus(boolean minimalstic) {
         this.setRotation(1);
         this.setAmount(4);
         this.setName('I');
         for (int i = 0; i < getAmount(); i++) {
-            Block block = new Block(Color.ORANGE);
+            Block block = new Block(Color.ORANGE, minimalstic);
             tetruBlocks.add(block);
         }
         platziereBlocks();

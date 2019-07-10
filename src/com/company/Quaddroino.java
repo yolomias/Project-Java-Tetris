@@ -10,12 +10,12 @@ import java.awt.*;
 
 public class Quaddroino extends Tetruino {
 
-    public Quaddroino() {
+    public Quaddroino(boolean minimalstic) {
         this.setRotation(1);
         this.setAmount(4);
         this.setName('Q');
         for (int i = 0; i < getAmount(); i++) {
-            Block block = new Block(Color.RED);
+            Block block = new Block(Color.RED, minimalstic);
             tetruBlocks.add(block);
         }
         platziereBlocks();

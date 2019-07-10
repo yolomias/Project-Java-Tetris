@@ -10,12 +10,12 @@ import java.awt.*;
 
 public class Ess extends Tetruino {
 
-    public Ess() {
+    public Ess(boolean minimalstic) {
         this.setRotation(1);
         this.setAmount(4);
         this.setName('S');
         for (int i = 0; i < getAmount(); i++) {
-            Block block = new Block(Color.GREEN);
+            Block block = new Block(Color.GREEN, minimalstic);
             int number = i;
             block.addActionListener(e -> System.out.println("Block Nr: " + number));
             tetruBlocks.add(block);

@@ -56,10 +56,15 @@ public class Spielfeld {
     private JLabel nextBackground = new JLabel("");
     //Wird für die Methode ThreadCount benötigt
     private boolean threadRunning = true;
+    //Minimalistisches Design der Blöcke
+    private boolean isMinimalistic;
+    private JCheckBox minimalisticBox = new JCheckBox();
     //Wird in dieser Version gerade nicht mehr benötigt
     private boolean gameRunning;
     private boolean isGameRunning;
     private JButton pauseButton = new JButton();
+    //Label für die Pause Funktion
+    private JLabel pauseLabel = new JLabel("Spiel pausieren / fortsetzen");
     //Labels um die Besten 5 Spieler anzuzeigen
     private JLabel scoreTitel = new JLabel();
     private JLabel[] scores = new JLabel[5];
@@ -248,6 +253,28 @@ public class Spielfeld {
             thread.start();
         }
     };
+    //Action um das Design minilastischer zu machen oder das alte wiederherzustellen
+    private Action minimalisticAction = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (minimalisticBox.isSelected()) {
+                isMinimalistic = true;
+                for(Tetruino t: tetruinos) {
+                    for (Block b: t.tetruBlocks) {
+                        b.setIcon(null);
+                    }
+                }
+            }
+            else {
+                isMinimalistic = false;
+                for(Tetruino t: tetruinos) {
+                    for (Block b: t.tetruBlocks) {
+                        b.setIcon(loadIcon("/texture/block.png"));
+                    }
+                }
+            }
+        }
+    };
 
     /*
     private void runningGame() {
@@ -291,6 +318,7 @@ public class Spielfeld {
         this.spielfeld =  new JFrame(getTitel());
         this.spielfeld.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.spielfeld.setSize(getX(), getY());
+        this.spielfeld.setResizable(false);
         //Erstelle beide Paneele für den Vordergrund und Hintergrund
         this.paneel = new JLayeredPane();
         this.paneel.setLayout(null);
@@ -299,6 +327,13 @@ public class Spielfeld {
         this.pan.setFocusable(false);
         this.pan.setOpaque(false);
         this.pan.setLayout(null);
+        //Initialisierung von Checkbox für minimalistischeres Design
+        this.isMinimalistic = false;
+        this.minimalisticBox.setBounds(600, 250, 200, 30);
+        this.minimalisticBox.setFocusable(false);
+        this.minimalisticBox.setAction(minimalisticAction);
+        this.minimalisticBox.setText("Minimalistischeres Design");
+        this.paneel.add(minimalisticBox);
         //Erstelle die Tetruinos Liste und füge gleich 2 hinzu
         this.tetruinos = new ArrayList<>();
         this.addTetruino();
@@ -364,7 +399,8 @@ public class Spielfeld {
         this.bgBtnGrp.add(background3);
         this.bgBtnGrp.add(background4);
         //Pause Button
-        this.pauseButton.setBounds(620, 120, 56, 73);
+        this.pauseLabel.setBounds(600, 110, 200, 30);
+        this.pauseButton.setBounds(660, 150, 56, 73);
         this.pauseButton.setIcon(loadIcon("/button_icons/play_button.png"));
         this.pauseButton.setOpaque(false);
         this.pauseButton.setContentAreaFilled(false);
@@ -372,6 +408,7 @@ public class Spielfeld {
         this.pauseButton.setFocusable(false);
         this.pauseButton.addActionListener(e -> pauseGame() );
         this.paneel.add(pauseButton);
+        this.paneel.add(pauseLabel);
         this.isGameRunning = true;
         //Initialisiere den Timer und die dazugehörigen Labels
         this.timerLabel.setBounds(400, 210, 300, 30);
@@ -517,6 +554,7 @@ public class Spielfeld {
                     tetrus.rotate('x');
                     break;
 
+                //+ Taste erhöht das Level
                 case 521:
                     if (level < 10) increaseLevel();
                     break;
@@ -711,31 +749,31 @@ public class Spielfeld {
         int random = rand.nextInt(7);
         switch (random) {
             case 0:
-                this.tetruinos.add(new Ess());
+                this.tetruinos.add(new Ess(isMinimalistic));
                 break;
 
             case 1:
-                this.tetruinos.add(new Zett());
+                this.tetruinos.add(new Zett(isMinimalistic));
                 break;
 
             case 2:
-                this.tetruinos.add(new Lawliet());
+                this.tetruinos.add(new Lawliet(isMinimalistic));
                 break;
 
             case 3:
-                this.tetruinos.add(new Lelouch());
+                this.tetruinos.add(new Lelouch(isMinimalistic));
                 break;
 
             case 4:
-                this.tetruinos.add(new Quaddroino());
+                this.tetruinos.add(new Quaddroino(isMinimalistic));
                 break;
 
             case 5:
-                this.tetruinos.add(new Tilt());
+                this.tetruinos.add(new Tilt(isMinimalistic));
                 break;
 
             case 6:
-                this.tetruinos.add(new Longinus());
+                this.tetruinos.add(new Longinus(isMinimalistic));
                 break;
         }
         // Wird das überhaupt noch benötigt ?!
