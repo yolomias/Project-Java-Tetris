@@ -216,6 +216,7 @@ public class Spielfeld {
                     nextTretrus.move('n');
                     //Füge ihn zum Paneel hinzu
                     nextTretrus.addToPanel(paneel, nextTretrus);
+                    nextTretrus.setActive(true);
                     //Setze den KeyListener auf den aktuellen Tetruino
                     tetrus.tetruBlocks.get(0).addKeyListener(tastenDruck);
                     //Erhöhe Punktzahl um 5
@@ -788,6 +789,7 @@ public class Spielfeld {
 
     //Zerstört alle vollständigen Reihen
     private void destroyBlocks() {
+        if (tetrus.getName() == 'P') asUsualISee();
             //Halte Timer an
             timer1.stop();
             //Wenn mehrere Reihen aufeinmal zerstört werden soll man auch mehr Punkte bekommen!
@@ -795,19 +797,18 @@ public class Spielfeld {
             //Gehe jedes Feld durch
             //vertikale Reihen
             for (int i = 550; i >= 50; i -= 25) {
-                //horizontale Reihen
                 //Zähle die Anzahl der Blöcke in der horizontalen Reihe
                 byte anzBlocks = 0;
-                for (int j = 50; j <= 300; j += 25) {
-                    for (Tetruino t: tetruinos) {
-                        //Zähle nur mit wenn Tetruino nicht aktiv ist
-                        if (!t.isActive()) {
-                            for (Block blocks : t.tetruBlocks) {
-                                //Wenn Position des Tetruinos gleich der der Reihe zähle hoch
-                                if (blocks.getPosX() == j && blocks.getPosY() == i) {
-                                    anzBlocks++;
-                                    //System.out.println(anzBlocks);
-                                }
+                List<Block> line = new ArrayList<>();
+                for (Tetruino t: tetruinos) {
+                    //Zähle nur mit wenn Tetruino nicht aktiv ist
+                    if (!t.isActive()) {
+                        for (Block blocks : t.tetruBlocks) {
+                            //Wenn Position des Tetruinos gleich der der Reihe zähle hoch
+                            if (blocks.getPosY() == i) {
+                                anzBlocks++;
+                                line.add(blocks);
+                                //System.out.println(anzBlocks);
                             }
                         }
                     }
@@ -815,7 +816,7 @@ public class Spielfeld {
                 //Wenn Anzahl der Blöcke größer oder gleich 10
                 if (anzBlocks >= 10) {
                     //Lösche Reihen auf der Höhe i
-                    removeLine(i);
+                    removeLine(line);
                     //Bewege Reihen nach unten auf der Höhe i
                     moveLine(i);
                     //Erhöhe i um 25 damit diese Reihe nochmal geprüft wird, da ja die Reihen nach unten gerutscht sind
@@ -861,52 +862,47 @@ public class Spielfeld {
     }
 
     //Entferne Reihen mit der übergebenen Höhe
-    private void removeLine(int height) {
-        //Lege zwei neue Arrays an um die zu löschenden Blöcke zwischen zu speichern
-        List<Block> blockList = new ArrayList<>();
-        List<Tetruino> tetruinoList = new ArrayList<>();
-        for (Tetruino t: tetruinos) {
-            if (!t.isActive() ) {
-                //Wenn Liste des Tetruinos leer ist, füge diesen auf TetruinoList hinzu
-                if (t.tetruBlocks.isEmpty()) tetruinoList.add(t);
-                //Gehe jeden Block auf dem Tetruino durch und wenn höhe übereinstimmt füge ihn der Blockliste hinzu
-                for (Block b : t.tetruBlocks) {
-                    if (b.getPosY() == height) blockList.add(b);
-                }
-            }
-        }
-        //Führe nur aus wenn Blockliste nicht leer
-        if (!blockList.isEmpty() ) {
-            if (tetrus.getName() == 'P') asUsualISee();
-            //Gehe alle Blöcke in der Liste durch
-            for (Block b: blockList) {
-                //Gehe alle Tetruinos bis auf den aktiven durch
-                for (Tetruino t: tetruinos) {
-                    if (!t.isActive() ) {
-                        //Füge eine Explosion an die Stelle des Block
-                        explosion(b.getPosX(), b.getPosY());
-                        //Entferne den Block vom Paneel
-                        paneel.remove(b);
-                        //Wentferne den Block aus der Liste des Tetruinos
-                        t.tetruBlocks.remove(b);
-                        //Warte 5 Millisekunden um, damit dem Zuschauer das Spektakel nicht entgeht
-                        try {
-                            Thread.sleep(5);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+    private void removeLine(/*int height*/ List<Block> liste) {
+            //Lege zwei neue Arrays an um die zu löschenden Blöcke zwischen zu speichern
+            List<Block> blockList = new ArrayList<>();
+            //Führe nur aus wenn Blockliste nicht leer
+            if (!liste.isEmpty()) {
+                //Gehe alle Blöcke in der Liste durch
+                for (Block b : liste) {
+                    //Gehe alle Tetruinos bis auf den aktiven durch
+                    for (Tetruino t : tetruinos) {
+                        if (!t.isActive()) {
+                            //Füge eine Explosion an die Stelle des Block
+                            explosion(b.getPosX(), b.getPosY());
+                            //Entferne den Block vom Paneel
+                            paneel.remove(b);
+                            //Wentferne den Block aus der Liste des Tetruinos
+                            t.tetruBlocks.remove(b);
+                            //Warte 5 Millisekunden um, damit dem Zuschauer das Spektakel nicht entgeht
+                            try {
+                                Thread.sleep(5);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            // System.out.println("Block entfernt!");
                         }
-                        // System.out.println("Block entfernt!");
                     }
                 }
             }
-        }
-        //Wenn TetruinoList nicht leer
-        if (!tetruinoList.isEmpty() ) {
-            //Entferne noch die Tetriunos aus der Liste wenn sie keine Blöcke mehr enthalten
-            for(Tetruino t: tetruinoList) {
-                tetruinos.remove(t);
+        List<Tetruino> tetruinoList = new ArrayList<>();
+        for (Tetruino t : tetruinos) {
+            if (!t.isActive()) {
+                //Wenn Liste des Tetruinos leer ist, füge diesen auf TetruinoList hinzu
+                if (t.tetruBlocks.isEmpty()) tetruinoList.add(t);
             }
         }
+            //Wenn TetruinoList nicht leer
+            if (!tetruinoList.isEmpty()) {
+                //Entferne noch die Tetriunos aus der Liste wenn sie keine Blöcke mehr enthalten
+                for (Tetruino t : tetruinoList) {
+                    tetruinos.remove(t);
+                }
+            }
        // System.out.println("Tetruinos Größe: " + tetruinos.size());
     }
 
@@ -946,7 +942,7 @@ public class Spielfeld {
         Thread snoopy = new Thread(() -> {
             JLabel pingasLabel = new JLabel();
             pan.add(pingasLabel);
-            pingasLabel.setBounds(125, 200, 224, 286);
+            pingasLabel.setBounds(125, 50, 224, 286);
             pingasLabel.setIcon(loadIcon("/texture/asusual.png"));
             try {
                 Thread.sleep(1000);
