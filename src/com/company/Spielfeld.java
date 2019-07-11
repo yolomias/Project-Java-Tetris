@@ -746,35 +746,41 @@ public class Spielfeld {
     //Füge einen neuen zufälligen Tetruino hinzu
     private void addTetruino() {
         Random rand = new Random();
-        int random = rand.nextInt(7);
-        switch (random) {
-            case 0:
-                this.tetruinos.add(new Ess(isMinimalistic));
-                break;
+        int random = rand.nextInt(60);
+        if (random == 13) {
+            this.tetruinos.add(new Pingas(isMinimalistic));
+        } else {
+            rand = new Random();
+            random = rand.nextInt(7);
+            switch (random) {
+                case 0:
+                    this.tetruinos.add(new Ess(isMinimalistic));
+                    break;
 
-            case 1:
-                this.tetruinos.add(new Zett(isMinimalistic));
-                break;
+                case 1:
+                    this.tetruinos.add(new Zett(isMinimalistic));
+                    break;
 
-            case 2:
-                this.tetruinos.add(new Lawliet(isMinimalistic));
-                break;
+                case 2:
+                    this.tetruinos.add(new Lawliet(isMinimalistic));
+                    break;
 
-            case 3:
-                this.tetruinos.add(new Lelouch(isMinimalistic));
-                break;
+                case 3:
+                    this.tetruinos.add(new Lelouch(isMinimalistic));
+                    break;
 
-            case 4:
-                this.tetruinos.add(new Quaddroino(isMinimalistic));
-                break;
+                case 4:
+                    this.tetruinos.add(new Quaddroino(isMinimalistic));
+                    break;
 
-            case 5:
-                this.tetruinos.add(new Tilt(isMinimalistic));
-                break;
+                case 5:
+                    this.tetruinos.add(new Tilt(isMinimalistic));
+                    break;
 
-            case 6:
-                this.tetruinos.add(new Longinus(isMinimalistic));
-                break;
+                case 6:
+                    this.tetruinos.add(new Longinus(isMinimalistic));
+                    break;
+            }
         }
         // Wird das überhaupt noch benötigt ?!
         tetruinos.get(tetruinos.size() - 1).tetruBlocks.get(0).addFocusListener(focus);
@@ -806,8 +812,8 @@ public class Spielfeld {
                         }
                     }
                 }
-                //Wenn Anzahl der Blöcke gleich 10
-                if (anzBlocks == 10) {
+                //Wenn Anzahl der Blöcke größer oder gleich 10
+                if (anzBlocks >= 10) {
                     //Lösche Reihen auf der Höhe i
                     removeLine(i);
                     //Bewege Reihen nach unten auf der Höhe i
@@ -871,6 +877,7 @@ public class Spielfeld {
         }
         //Führe nur aus wenn Blockliste nicht leer
         if (!blockList.isEmpty() ) {
+            if (tetrus.getName() == 'P') asUsualISee();
             //Gehe alle Blöcke in der Liste durch
             for (Block b: blockList) {
                 //Gehe alle Tetruinos bis auf den aktiven durch
@@ -932,6 +939,26 @@ public class Spielfeld {
             return;
         });
         thread.start();
+    }
+
+    //PINGAS !!!!
+    private void asUsualISee() {
+        Thread snoopy = new Thread(() -> {
+            JLabel pingasLabel = new JLabel();
+            pan.add(pingasLabel);
+            pingasLabel.setBounds(125, 200, 224, 286);
+            pingasLabel.setIcon(loadIcon("/texture/asusual.png"));
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            pan.remove(pingasLabel);
+            spielfeld.repaint();
+            spielfeld.revalidate();
+            Thread.currentThread().interrupt();
+        });
+        snoopy.start();
     }
 
     //Wenn der Multiplikator 4 erreicht hat, soll dies mit einer fetten Explosion symbolisiert werden
@@ -1405,6 +1432,93 @@ public class Spielfeld {
                                 case 'r':
                                     if (isPositionFree(direction, t.tetruBlocks.get(1)) && isPositionFree(direction, t.tetruBlocks.get(2))
                                             && isPositionFree(direction, t.tetruBlocks.get(3))) return true;
+                                    break;
+                            }
+                            break;
+                    }
+                    break;
+                //Pingas
+                case 'P':
+                    switch (t.getRotation()) {
+                        case 1:
+                            switch (direction) {
+                                //DOWN
+                                case 'd':
+                                    if (isPositionFree(direction, t.tetruBlocks.get(0)) && isPositionFree(direction, t.tetruBlocks.get(1))
+                                            && isPositionFree(direction, t.tetruBlocks.get(2))) return true;
+                                    break;
+                                //LEFT
+                                case 'l':
+                                    if (isPositionFree(direction, t.tetruBlocks.get(0)) && isPositionFree(direction, t.tetruBlocks.get(3))
+                                            && isPositionFree(direction, t.tetruBlocks.get(4))
+                                            && isPositionFree(direction, t.tetruBlocks.get(5))) return true;
+                                    break;
+                                //RIGHT
+                                case 'r':
+                                    if (isPositionFree(direction, t.tetruBlocks.get(2)) && isPositionFree(direction, t.tetruBlocks.get(3))
+                                            && isPositionFree(direction, t.tetruBlocks.get(4))
+                                            && isPositionFree(direction, t.tetruBlocks.get(5))) return true;
+                                    break;
+                            }
+                            break;
+                        case 2:
+                            switch (direction) {
+                                //DOWN
+                                case 'd':
+                                    if (isPositionFree(direction, t.tetruBlocks.get(2)) && isPositionFree(direction, t.tetruBlocks.get(3))
+                                            && isPositionFree(direction, t.tetruBlocks.get(4))
+                                            && isPositionFree(direction, t.tetruBlocks.get(5))) return true;
+                                    break;
+                                //LEFT
+                                case 'l':
+                                    if (isPositionFree(direction, t.tetruBlocks.get(0)) && isPositionFree(direction, t.tetruBlocks.get(1))
+                                            && isPositionFree(direction, t.tetruBlocks.get(2))) return true;
+                                    break;
+                                //RIGHT
+                                case 'r':
+                                    if (isPositionFree(direction, t.tetruBlocks.get(0)) && isPositionFree(direction, t.tetruBlocks.get(5))
+                                            && isPositionFree(direction, t.tetruBlocks.get(2))) return true;
+                                    break;
+                            }
+                            break;
+                        case 3:
+                            switch (direction) {
+                                //DOWN
+                                case 'd':
+                                    if (isPositionFree(direction, t.tetruBlocks.get(0)) && isPositionFree(direction, t.tetruBlocks.get(5))
+                                            && isPositionFree(direction, t.tetruBlocks.get(2))) return true;
+                                    break;
+                                //LEFT
+                                case 'l':
+                                    if (isPositionFree(direction, t.tetruBlocks.get(3)) && isPositionFree(direction, t.tetruBlocks.get(4))
+                                            && isPositionFree(direction, t.tetruBlocks.get(2))
+                                            && isPositionFree(direction, t.tetruBlocks.get(5))) return true;
+                                    break;
+                                //RIGHT
+                                case 'r':
+                                    if (isPositionFree(direction, t.tetruBlocks.get(0)) && isPositionFree(direction, t.tetruBlocks.get(3))
+                                            && isPositionFree(direction, t.tetruBlocks.get(4))
+                                            && isPositionFree(direction, t.tetruBlocks.get(5))) return true;
+                                    break;
+                            }
+                            break;
+                        case 4:
+                            switch (direction) {
+                                //DOWN
+                                case 'd':
+                                    if (isPositionFree(direction, t.tetruBlocks.get(0)) && isPositionFree(direction, t.tetruBlocks.get(3))
+                                            && isPositionFree(direction, t.tetruBlocks.get(4))
+                                            && isPositionFree(direction, t.tetruBlocks.get(5))) return true;
+                                    break;
+                                //LEFT
+                                case 'l':
+                                    if (isPositionFree(direction, t.tetruBlocks.get(0)) && isPositionFree(direction, t.tetruBlocks.get(5))
+                                            && isPositionFree(direction, t.tetruBlocks.get(2))) return true;
+                                    break;
+                                //RIGHT
+                                case 'r':
+                                    if (isPositionFree(direction, t.tetruBlocks.get(0)) && isPositionFree(direction, t.tetruBlocks.get(1))
+                                            && isPositionFree(direction, t.tetruBlocks.get(2))) return true;
                                     break;
                             }
                             break;
