@@ -2,12 +2,15 @@
 package com.company;
 
 import javax.annotation.Resource;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.Timer;
 import javax.xml.soap.Node;
+import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
+import java.util.List;
 
 public class Spielfeld {
     //x, y Größe des Spielfensters
@@ -470,6 +473,16 @@ public class Spielfeld {
         this.paneel.add(bl);
         */
 
+       // List<Image> icons = new ArrayList<Image>();
+      //  icons.add(loadIcon(""))
+
+        try {
+            spielfeld.setIconImage(loadImageIcon("/texture/icon64.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         //Füge die Hintergründe für das Spielfeld ein
         this.background.setIcon(new ImageIcon(Class.class.getResource("/background/1.png")));
         this.background.setLocation(75, 50);
@@ -649,6 +662,11 @@ public class Spielfeld {
     //Gibt ein Icon zurück
     private ImageIcon loadIcon(String path) {
         return new ImageIcon(Class.class.getResource(path));
+    }
+
+    //Gibt ein Image zurück
+    private Image loadImageIcon(String path) throws IOException {
+        return ImageIO.read(getClass().getResource(path));
     }
 
     //Methode um das Spiel neuzustarten
