@@ -477,7 +477,7 @@ public class Spielfeld {
       //  icons.add(loadIcon(""))
 
         try {
-            spielfeld.setIconImage(loadImageIcon("/texture/icon64.png"));
+            spielfeld.setIconImage(loadImage("/texture/icon64.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -665,7 +665,7 @@ public class Spielfeld {
     }
 
     //Gibt ein Image zurück
-    private Image loadImageIcon(String path) throws IOException {
+    private Image loadImage(String path) throws IOException {
         return ImageIO.read(getClass().getResource(path));
     }
 
