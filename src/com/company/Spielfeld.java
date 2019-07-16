@@ -843,8 +843,8 @@ public class Spielfeld {
                     //Erhöhe Multiplikator
                     multiplikator++;
                     //Zeichne das Spielfeld neu
-                    spielfeld.repaint();
-                    spielfeld.revalidate();
+                   // spielfeld.repaint();
+                   // spielfeld.revalidate();
                     //Erhöhe Score und Reihen
                     score += 100 * level * multiplikator;
                     rows++;
