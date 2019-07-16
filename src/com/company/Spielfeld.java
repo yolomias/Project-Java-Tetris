@@ -251,6 +251,7 @@ public class Spielfeld {
                 threadRunning = false;
                 //Aktuallisiere Punkte und Reihen etc
                 updateGame();
+                Toolkit.getDefaultToolkit().sync();
                 // System.out.println("Counter: " + counter);
             });
             //Starte den Spiel Thread
