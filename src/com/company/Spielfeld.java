@@ -352,6 +352,7 @@ public class Spielfeld {
         this.nextTretrus = tetruinos.get(1);
         this.nextTretrus.addToPanel(paneel, nextTretrus);
         this.nextTretrus.move('n');
+        this.nextTretrus.setActive(true);
         //Setze die Maße und Positionen der Labels
         this.fpsLabel.setBounds(75, 10, 100, 30);
         this.nextLabel.setBounds(400, 10, 200, 30);
