@@ -629,7 +629,7 @@ public class Spielfeld {
                     "(Dieser sollte mindestens aus 2 Zeichen bestehen und nicht nur aus Leerzeichen bestehen)");
 
             if (name != null) {
-                if (name.length() >= 2) namePassend = true;
+                if (name.length() >= 2 && name.length() <= 20) namePassend = true;
             }
         } while (!namePassend);
         int i = 0;
