@@ -389,15 +389,28 @@ public class Spielfeld {
         background3.setFocusable(false);
         background4.setFocusable(false);
         //Setze die Größe
-        background1.setSize(20,20);
-        background2.setSize(20,20);
-        background3.setSize(20,20);
-        background4.setSize(20,20);
+        background1.setSize(15,15);
+        background2.setSize(15,15);
+        background3.setSize(15,15);
+        background4.setSize(15,15);
         //Füge die Radio Buttons dem Paneel hinzu
         this.paneel.add(background1);
         this.paneel.add(background2);
         this.paneel.add(background3);
         this.paneel.add(background4);
+        //Setze Icons
+        background1.setIcon(loadIcon("/radio_buttons/radio.png"));
+        background2.setIcon(loadIcon("/radio_buttons/radio.png"));
+        background3.setIcon(loadIcon("/radio_buttons/radio.png"));
+        background4.setIcon(loadIcon("/radio_buttons/radio.png"));
+        background1.setSelectedIcon(loadIcon("/radio_buttons/radio_selected.png"));
+        background2.setSelectedIcon(loadIcon("/radio_buttons/radio_selected.png"));
+        background3.setSelectedIcon(loadIcon("/radio_buttons/radio_selected.png"));
+        background4.setSelectedIcon(loadIcon("/radio_buttons/radio_selected.png"));
+        background1.setPressedIcon(loadIcon("/radio_buttons/radio_pressed.png"));
+        background2.setPressedIcon(loadIcon("/radio_buttons/radio_pressed.png"));
+        background3.setPressedIcon(loadIcon("/radio_buttons/radio_pressed.png"));
+        background4.setPressedIcon(loadIcon("/radio_buttons/radio_pressed.png"));
         //Füge die Action Listener hinzu
         background1.addActionListener(e -> changeBackgrounds(1));
         background2.addActionListener(e -> changeBackgrounds(2));
