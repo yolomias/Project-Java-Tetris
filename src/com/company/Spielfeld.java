@@ -54,6 +54,8 @@ public class Spielfeld {
     private JLabel scoreLabel = new JLabel();
     //Variable in der der Punktestand eingespeichert ist
     private long score = 0;
+    //Hintergrund des Spielfeldes
+    private JLabel hintergrund = new JLabel("");
     //Hintergrund des Feldes indem sich die Tetruinos bewegen
     private JLabel background = new JLabel("");
     private JLabel nextBackground = new JLabel("");
@@ -154,7 +156,8 @@ public class Spielfeld {
             //Wird in einem Thread gestartet um das Spieltempo zu erhöhen, führt selten dazu dass sich ein Tetruino zersplittert
             Thread thread = new Thread(() -> {
                 //starte ThreadCount
-                threadCount();
+                 threadCount();
+
             /*
 
 
@@ -338,6 +341,7 @@ public class Spielfeld {
         this.minimalisticBox.setFocusable(false);
         this.minimalisticBox.setAction(minimalisticAction);
         this.minimalisticBox.setText("Minimalistischeres Design");
+        this.minimalisticBox.setOpaque(false);
         this.paneel.add(minimalisticBox);
         //Erstelle die Tetruinos Liste und füge gleich 2 hinzu
         this.tetruinos = new ArrayList<>();
@@ -399,6 +403,11 @@ public class Spielfeld {
         background2.addActionListener(e -> changeBackgrounds(2));
         background3.addActionListener(e -> changeBackgrounds(3));
         background4.addActionListener(e -> changeBackgrounds(4));
+        // Entferne Hintergrundfarbe
+        background1.setOpaque(false);
+        background2.setOpaque(false);
+        background3.setOpaque(false);
+        background4.setOpaque(false);
         //Gruppiere die Radio Buttons
         this.bgBtnGrp.add(background1);
         this.bgBtnGrp.add(background2);
@@ -486,16 +495,20 @@ public class Spielfeld {
 
 
         //Füge die Hintergründe für das Spielfeld ein
-        this.background.setIcon(new ImageIcon(Class.class.getResource("/background/1.png")));
-        this.background.setLocation(75, 50);
-        this.background.setSize(250, 500);
-        this.nextBackground.setIcon(new ImageIcon(Class.class.getResource("/background/1b.png")));
-        this.nextBackground.setBounds(400,50, 150,150);
+        this.hintergrund.setIcon(loadIcon("/background/background.jpg"));
+        this.hintergrund.setBounds(0, 0, 950, 617);
+       //this.background.setIcon(new ImageIcon(Class.class.getResource("/background/1.png")));
+       //this.background.setLocation(75, 50);
+       //this.background.setSize(250, 500);
+       //this.nextBackground.setIcon(new ImageIcon(Class.class.getResource("/background/1b.png")));
+       //this.nextBackground.setBounds(400,50, 150,150);
         //Verschiebe sie in den Hintergrund damit sie das Spielfeld nicht verdecken
-        this.paneel.add(background);
-        this.paneel.setLayer(background, 0);
-        this.paneel.add(nextBackground);
-        this.paneel.setLayer(nextBackground, 0);
+        this.paneel.add(hintergrund);
+        this.paneel.setLayer(hintergrund, 0);
+      //  this.paneel.add(background);
+      //  this.paneel.setLayer(background, 1);
+      //  this.paneel.add(nextBackground);
+      //  this.paneel.setLayer(nextBackground, 1);
         //Füge die Inhalte dem Frame hinzu
         this.spielfeld.add(pan);
         this.spielfeld.add(paneel);
