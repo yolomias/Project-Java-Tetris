@@ -725,6 +725,7 @@ public class Spielfeld {
         this.nextTretrus = tetruinos.get(1);
         this.nextTretrus.addToPanel(paneel, nextTretrus);
         this.nextTretrus.move('n');
+        this.nextTretrus.setActive(true);
         //this.spielfeld.addKeyListener(tastenDruck);
         this.spielfeld.requestFocus();
         timer1.start();
