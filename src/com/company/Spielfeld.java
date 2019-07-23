@@ -337,7 +337,7 @@ public class Spielfeld {
         this.pan.setLayout(null);
         //Initialisierung von Checkbox für minimalistischeres Design
         this.isMinimalistic = false;
-        this.minimalisticBox.setBounds(600, 250, 200, 30);
+        this.minimalisticBox.setBounds(595, 250, 200, 30);
         this.minimalisticBox.setFocusable(false);
         this.minimalisticBox.setAction(minimalisticAction);
         this.minimalisticBox.setText("Minimalistischeres Design");
@@ -508,7 +508,7 @@ public class Spielfeld {
 
 
         //Füge die Hintergründe für das Spielfeld ein
-        this.hintergrund.setIcon(loadIcon("/background/background.jpg"));
+        this.hintergrund.setIcon(loadIcon("/background/background.png"));
         this.hintergrund.setBounds(0, 0, 950, 617);
        //this.background.setIcon(new ImageIcon(Class.class.getResource("/background/1.png")));
        //this.background.setLocation(75, 50);
