@@ -64,7 +64,8 @@ public class Spielfeld {
     //Minimalistisches Design der Blöcke
     private boolean isMinimalistic;
     private JCheckBox minimalisticBox = new JCheckBox();
-    //Wird in dieser Version gerade nicht mehr benötigt
+    // Variablen um den Spielablauf zu kontrollieren
+    private boolean isGameNewstarting = false;
     private boolean gameRunning;
     private boolean isGameRunning;
     private JButton pauseButton = new JButton();
@@ -611,8 +612,12 @@ public class Spielfeld {
             timer1.stop();
             timerVergangeneZeit.stop();
             int result = JOptionPane.showConfirmDialog(spielfeld, "Willst du das Spiel wirklich neustarten?");
-            if (result == JOptionPane.YES_OPTION) neuStart();
+            if (result == JOptionPane.YES_OPTION) {
+                if (!gameRunning) pauseButton.doClick();
+                neuStart();
+            }
             else {
+                if (!gameRunning) pauseButton.doClick();
                 timer1.start();
                 timerVergangeneZeit.start();
             }
