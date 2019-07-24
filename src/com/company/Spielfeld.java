@@ -606,6 +606,17 @@ public class Spielfeld {
                 //    break;
             }
         }
+        if (taste == 32) pauseButton.doClick();
+        else if (taste == 82) {
+            timer1.stop();
+            timerVergangeneZeit.stop();
+            int result = JOptionPane.showConfirmDialog(spielfeld, "Willst du das Spiel wirklich neustarten?");
+            if (result == JOptionPane.YES_OPTION) neuStart();
+            else {
+                timer1.start();
+                timerVergangeneZeit.start();
+            }
+        }
     }
 
     //Initialisiere die 5 besten Spieler Labels
