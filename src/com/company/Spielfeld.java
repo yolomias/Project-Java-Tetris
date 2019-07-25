@@ -810,40 +810,44 @@ public class Spielfeld {
     //Füge einen neuen zufälligen Tetruino hinzu
     private void addTetruino() {
         Random rand = new Random();
-        int random = rand.nextInt(60);
-        if (random == 13) {
-            this.tetruinos.add(new Pingas(isMinimalistic));
-        } else {
+        int random = rand.nextInt(100);
+        if (random == 31) this.tetruinos.add(new Ultimatus(isMinimalistic));
+        else {
             rand = new Random();
-            random = rand.nextInt(7);
-            switch (random) {
-                case 0:
-                    this.tetruinos.add(new Ess(isMinimalistic));
-                    break;
+            random = rand.nextInt(60);
+            if (random == 13) this.tetruinos.add(new Pingas(isMinimalistic));
+            else {
+                rand = new Random();
+                random = rand.nextInt(7);
+                switch (random) {
+                    case 0:
+                        this.tetruinos.add(new Ess(isMinimalistic));
+                        break;
 
-                case 1:
-                    this.tetruinos.add(new Zett(isMinimalistic));
-                    break;
+                    case 1:
+                        this.tetruinos.add(new Zett(isMinimalistic));
+                        break;
 
-                case 2:
-                    this.tetruinos.add(new Lawliet(isMinimalistic));
-                    break;
+                    case 2:
+                        this.tetruinos.add(new Lawliet(isMinimalistic));
+                        break;
 
-                case 3:
-                    this.tetruinos.add(new Lelouch(isMinimalistic));
-                    break;
+                    case 3:
+                        this.tetruinos.add(new Lelouch(isMinimalistic));
+                        break;
 
-                case 4:
-                    this.tetruinos.add(new Quaddroino(isMinimalistic));
-                    break;
+                    case 4:
+                        this.tetruinos.add(new Quaddroino(isMinimalistic));
+                        break;
 
-                case 5:
-                    this.tetruinos.add(new Tilt(isMinimalistic));
-                    break;
+                    case 5:
+                        this.tetruinos.add(new Tilt(isMinimalistic));
+                        break;
 
-                case 6:
-                    this.tetruinos.add(new Longinus(isMinimalistic));
-                    break;
+                    case 6:
+                        this.tetruinos.add(new Longinus(isMinimalistic));
+                        break;
+                }
             }
         }
         // Wird das überhaupt noch benötigt ?!
@@ -873,6 +877,14 @@ public class Spielfeld {
                                 line.add(blocks);
                                 //System.out.println(anzBlocks);
                             }
+                            if (tetrus.getName() == 'U') {
+                                if (blocks.getPosX() == tetrus.tetruBlocks.get(0).getPosX()) {
+                                    line.add(blocks);
+                                }
+                                if (blocks.getPosY() == tetrus.tetruBlocks.get(0).getPosY()) {
+                                    line.add(blocks);
+                                }
+                            }
                         }
                     }
                 }
@@ -893,6 +905,18 @@ public class Spielfeld {
                     score += 100 * level * multiplikator;
                     rows++;
 
+                }
+                //Wenn Tetruino ein Ultimatus ist
+                else if (tetrus.getName() == 'U') {
+                    int height = tetrus.tetruBlocks.get(0).getPosY();
+                    int width = tetrus.tetruBlocks.get(0).getPosX();
+                    explosionUltimatus(width, height);
+                    removeLine(line);
+                    if (tetruinos.size() > 0) moveLine(height);
+                    score += 100 * level * 4;
+                    rows++;
+
+                    break;
                 }
                 //if (multiplikator == 4) boomBitch();
             }
@@ -998,6 +1022,46 @@ public class Spielfeld {
             return;
         });
         thread.start();
+    }
+
+    //Wenn ein Ultimatus hochgeht, soll sich die Explosion in alle Richtungen ausbreiten
+    private void explosionUltimatus(int x, int y) {
+        //Hoch
+        if (y > 50) {
+            Thread up = new Thread(() -> {
+                for (int i = y - 25; i >= 50; i -= 25) {
+                    explosion(x, i);
+                }
+            });
+            up.start();
+        }
+        //Runter
+        if (y < 530) {
+            Thread down = new Thread(() -> {
+                for (int i = y + 25; i <= 530; i += 25) {
+                    explosion(x, i);
+                }
+            });
+            down.start();
+        }
+        //Links
+        if (x > 60) {
+            Thread left = new Thread(() -> {
+                for (int i = x - 25; i >= 60; i -= 25) {
+                    explosion(i, y);
+                }
+            });
+            left.start();
+        }
+        //Rechts
+        if (x < 300) {
+            Thread right = new Thread(() -> {
+                for (int i = x + 25; i <= 300; i += 25) {
+                    explosion(i, y);
+                }
+            });
+            right.start();
+        }
     }
 
     //PINGAS !!!!
@@ -1580,6 +1644,24 @@ public class Spielfeld {
                                             && isPositionFree(direction, t.tetruBlocks.get(2))) return true;
                                     break;
                             }
+                            break;
+                    }
+                    break;
+                //Ultimatus
+                case 'U':
+                    switch (direction) {
+                        //DOWN
+                        case 'd':
+                            if (isPositionFree(direction, t.tetruBlocks.get(0)))
+                                return true;
+                            break;
+                        //LEFT
+                        case 'l':
+                            if (isPositionFree(direction, t.tetruBlocks.get(0))) return true;
+                            break;
+                        //RIGHT
+                        case 'r':
+                            if (isPositionFree(direction, t.tetruBlocks.get(0))) return true;
                             break;
                     }
                     break;
