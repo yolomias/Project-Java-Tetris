@@ -1031,6 +1031,11 @@ public class Spielfeld {
             Thread up = new Thread(() -> {
                 for (int i = y - 25; i >= 50; i -= 25) {
                     explosion(x, i);
+                    try {
+                        Thread.sleep(75);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
             up.start();
@@ -1040,6 +1045,11 @@ public class Spielfeld {
             Thread down = new Thread(() -> {
                 for (int i = y + 25; i <= 530; i += 25) {
                     explosion(x, i);
+                    try {
+                        Thread.sleep(75);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
             down.start();
@@ -1049,6 +1059,11 @@ public class Spielfeld {
             Thread left = new Thread(() -> {
                 for (int i = x - 25; i >= 60; i -= 25) {
                     explosion(i, y);
+                    try {
+                        Thread.sleep(75);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
             left.start();
@@ -1058,6 +1073,11 @@ public class Spielfeld {
             Thread right = new Thread(() -> {
                 for (int i = x + 25; i <= 300; i += 25) {
                     explosion(i, y);
+                    try {
+                        Thread.sleep(75);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
             right.start();
