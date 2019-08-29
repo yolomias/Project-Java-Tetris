@@ -613,11 +613,11 @@ public class Spielfeld {
             timerVergangeneZeit.stop();
             int result = JOptionPane.showConfirmDialog(spielfeld, "Willst du das Spiel wirklich neustarten?");
             if (result == JOptionPane.YES_OPTION) {
-                if (!gameRunning) pauseButton.doClick();
+                if (!isGameRunning) pauseButton.doClick();
                 neuStart();
             }
             else {
-                if (!gameRunning) pauseButton.doClick();
+                if (!isGameRunning) pauseButton.doClick();
                 timer1.start();
                 timerVergangeneZeit.start();
             }
